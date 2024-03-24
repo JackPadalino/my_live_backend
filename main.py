@@ -3,10 +3,24 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import boto3
 from botocore.exceptions import BotoCoreError
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    os.getenv('ML_ALLOWED_HOST')
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 ivsClient = boto3.client(
     'ivschat',
@@ -19,7 +33,7 @@ class ChatUser(BaseModel):
     username: str
     role: str
 
-@app.post("/join")
+@app.post("/chat/join")
 async def create_token(body:ChatUser):
         if body.role=='admin':
             capabilities=['SEND_MESSAGE','DISCONNECT_USER','DELETE_MESSAGE']
