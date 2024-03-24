@@ -10,8 +10,8 @@ load_dotenv()
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",
-    os.getenv('ML_ALLOWED_HOST')
+    os.getenv('ML_ALLOWED_HOST_DEV'),
+    os.getenv('ML_ALLOWED_HOST_PROD')
 ]
 
 app.add_middleware(
