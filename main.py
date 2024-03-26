@@ -50,5 +50,8 @@ async def create_token(body:ChatUser):
                 userId=body.username,
             )
             return response
+        # handle AWS-related errors
         except BotoCoreError as e:
-            return {'error':str(e)}
+            return f"AWS Error: {e}"
+        except Exception as e:
+            return f"Error: {e}"
